@@ -1,0 +1,11 @@
+@mixin text-secondary {
+  color: $primary-100;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+@mixin text-headline {
+  color: $primary-400;
+  font-size: 16px;
+  font-weight: 600;
+}
