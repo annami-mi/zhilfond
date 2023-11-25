@@ -84,11 +84,20 @@ export default {
 
     getPersonList: async function (){
       const usernames = this.listUsername
+      const ids = this.listId
       let newArr = []
+      let list
       this.isLoading = true // присвивает статус загрузки
 
-      const response = await apiGetPersonList(this.listId)
-      let list = response.result || []
+      // при таком методе отправляется запрос на id каждый при мультипоиске
+      // для оптимизации имеет смысл переписать запрос:
+      // насколько я помню функции способны "хранить" в себе возвращаемое значение
+      // разобраться с кешированием данных внутри функции и возврашать кешированное значение
+      // если входной id не изменился
+      if(ids && ids.length){
+        const response = await apiGetPersonList(this.listId)
+        list = response.result || []
+      }
 
       // запрашивает весь список сострудников
       // не очень хороший вариант на самом деле на каждый символ делать запрос всего списка,
@@ -102,11 +111,13 @@ export default {
         if(listFromStore){
           // есть в сторе
           listAll = listFromStore
+          console.log(listFromStore)
         } else {
           // нет в сторе
           const responseAll = await apiGetPersonList()
           listAll = responseAll.result
           this.storeUpdatePersonAllList(listAll)
+          console.log(2)
         }
 
         // фильтрует лист по ключу
